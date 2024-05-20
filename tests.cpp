@@ -1,30 +1,42 @@
 #include <gtest/gtest.h>
 #include "hamburger.cpp"
 
-TEST(HamburgerBuilderTest, InitialState) {
-    HamburgerBuilder vm;
-    EXPECT_EQ(vm.GetCpuCount(), 1);
-    EXPECT_EQ(vm.GetRamSize(), 500);
+TEST(HamburgerBuilderTest, CreateSimpleHamburger) {
+    HamburgerBuilder builder;
+    auto burger = builder.BuildHamburger();
+    EXPECT_EQ(burger.GetBuns(), 2);
+    EXPECT_EQ(burger.GetPatties(), 1);
+    EXPECT_EQ(burger.GetCheese(), 1);
+    EXPECT_EQ(burger.GetVegetables(), 2);
+    EXPECT_EQ(burger.GetSauces(), 1);
 }
 
-TEST(HamburgerBuilderTest, ChangeCpuCount) {
-    HamburgerBuilder vm;
-    vm.ChangeCpuCount(4);
-    EXPECT_EQ(vm.GetCpuCount(), 4);
+TEST(HamburgerBuilderTest, CreateDeluxeHamburger) {
+    HamburgerBuilder builder;
+    builder.AddExtraBuns()
+           .AddExtraPatties()
+           .AddExtraCheese()
+           .AddExtraVegetables()
+           .AddExtraSauces();
+    auto burger = builder.BuildHamburger();
+    EXPECT_EQ(burger.GetBuns(), 3);
+    EXPECT_EQ(burger.GetPatties(), 2);
+    EXPECT_EQ(burger.GetCheese(), 2);
+    EXPECT_EQ(burger.GetVegetables(), 3);
+    EXPECT_EQ(burger.GetSauces(), 2);
 }
 
-TEST(HamburgerBuilderTest, ChangeRamSize) {
-    HamburgerBuilder vm;
-    vm.ChangeRamSize(2000);
-    EXPECT_EQ(vm.GetRamSize(), 2000);
-}
-
-TEST(HamburgerBuilderTest, ResetToSnapshot) {
-    HamburgerBuilder vm;
-    auto snapshot = vm.TakeSnapshot();
-    vm.ChangeCpuCount(4);
-    vm.ChangeRamSize(2000);
-    vm.ResetToSnapshot(snapshot);
-    EXPECT_EQ(vm.GetCpuCount(), 1);
-    EXPECT_EQ(vm.GetRamSize(), 500);
+TEST(HamburgerBuilderTest, CreateCustomHamburger) {
+    HamburgerBuilder builder;
+    builder.AddBuns(4)
+           .AddPatties(3)
+           .AddCheese(2)
+           .AddVegetables(4)
+           .AddSauces(3);
+    auto burger = builder.BuildHamburger();
+    EXPECT_EQ(burger.GetBuns(), 4);
+    EXPECT_EQ(burger.GetPatties(), 3);
+    EXPECT_EQ(burger.GetCheese(), 2);
+    EXPECT_EQ(burger.GetVegetables(), 4);
+    EXPECT_EQ(burger.GetSauces(), 3);
 }
