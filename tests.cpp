@@ -1,48 +1,28 @@
 #include <gtest/gtest.h>
-#include "hamburger.h"
+#include "hamburger.cpp"
 
-class HamburgerBuilderTest : public ::testing::Test {
-protected:
-    void SetUp() override {
-        builder = std::make_unique<HamburgerBuilder>();
-    }
+// Test case for Hamburger class
+TEST(HamburgerTest, HamburgerPrintTest) {
+    std::vector<std::unique_ptr<HamburgerIngredient>> ingredients;
+    ingredients.push_back(std::make_unique<Bread>());
+    ingredients.push_back(std::make_unique<Patty>());
+    ingredients.push_back(std::make_unique<Cheese>());
+    ingredients.push_back(std::make_unique<Tomato>());
+    ingredients.push_back(std::make_unique<Lettuce>());
+    ingredients.push_back(std::make_unique<Sauce>());
 
-    std::unique_ptr<HamburgerBuilder> builder;
-};
+    Hamburger hamburger(std::move(ingredients));
 
-TEST_F(HamburgerBuilderTest, BuildSimpleHamburger) {
-    auto burger = builder->BuildHamburger();
-    EXPECT_EQ(burger.GetBuns(), 2);
-    EXPECT_EQ(burger.GetPatties(), 1);
-    EXPECT_EQ(burger.GetCheese(), 1);
-    EXPECT_EQ(burger.GetVegetables(), 2);
-    EXPECT_EQ(burger.GetSauces(), 1);
+    testing::internal::CaptureStdout();
+    hamburger.Print();
+    std::string output = testing::internal::GetCapturedStdout();
+
+    EXPECT_EQ(output, "----------\nBread\nPatty\nCheese\nTomato\nLettuce\nSauce\n----------\n");
 }
 
-TEST_F(HamburgerBuilderTest, BuildDeluxeHamburger) {
-    builder->AddExtraBuns()
-           ->AddExtraPatties()
-           ->AddExtraCheese()
-           ->AddExtraVegetables()
-           ->AddExtraSauces();
-    auto burger = builder->BuildHamburger();
-    EXPECT_EQ(burger.GetBuns(), 3);
-    EXPECT_EQ(burger.GetPatties(), 2);
-    EXPECT_EQ(burger.GetCheese(), 2);
-    EXPECT_EQ(burger.GetVegetables(), 3);
-    EXPECT_EQ(burger.GetSauces(), 2);
-}
+// Add more test cases as needed
 
-TEST_F(HamburgerBuilderTest, BuildCustomHamburger) {
-    builder->AddBuns(4)
-           ->AddPatties(3)
-           ->AddCheese(2)
-           ->AddVegetables(4)
-           ->AddSauces(3);
-    auto burger = builder->BuildHamburger();
-    EXPECT_EQ(burger.GetBuns(), 4);
-    EXPECT_EQ(burger.GetPatties(), 3);
-    EXPECT_EQ(burger.GetCheese(), 2);
-    EXPECT_EQ(burger.GetVegetables(), 4);
-    EXPECT_EQ(burger.GetSauces(), 3);
+int main(int argc, char **argv) {
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
