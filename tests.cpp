@@ -1,3 +1,6 @@
+#include <gtest/gtest.h>
+#include "hamburger.cpp"
+
 TEST(HamburgerBuilderTest, InitialState) {
     HamburgerBuilder vm;
     EXPECT_EQ(vm.GetCpuCount(), 1);
