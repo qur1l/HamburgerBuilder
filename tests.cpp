@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "hamburger.cpp"
+#include "hamburger.hpp"
 
 // Test case for Hamburger class
 TEST(HamburgerTest, HamburgerPrintTest) {
