@@ -22,7 +22,7 @@ jobs:
       run: cmake --build build
 
     - name: Run tests
-      run: cmake --build build --target tests -- ARGS=--verbose
+      run: cmake --build build --target test -- ARGS=--verbose
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
